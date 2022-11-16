@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}Orders{% endblock %}
+
+{% block content %}
+
+{% if user.B_name == current_user.B_name and current_user.B_type == 'farm' %}
+    <p align="right"><button class="btn btn-info btn-gradient" onclick="window.location.href='{{ url_for("views.edit_order_form") }}';">Edit Order Form</button></p>
+{% endif %}
+
+<h1 align="center" class="p-3 mb-2 bg-info text-white bg-gradient bg-opacity-90 bg-text-white"><u>Open Orders</u></h1>
+<br />
+
+{% if current_user.B_type == 'farm' %}
+<table class="table align-middle table-striped table-bordered">
+    <thead class="table-secondary">
+        <tr>
+            <th colspan="8" align="left"><h3><u>Item Totals</u></h3></th>
+        </tr>
+        <tr>
+            <th>Item</th>
+            <th>Total Amount</th>
+            <th>Unit</th>
+        </tr>
+    </thead>
+    <tbody class="table-info">
+        {% for total in item_totals %}
+        <tr>
+            <td>{{ total[1] }}</td>
+            <td>{{ total[0] }}</td>
+            <td>{{ total[2] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br />
+{% endif %}
+
+
+
+{% if current_user.B_type == 'farm' %}
+{% for customer in customer_totals %}
+<table class="table align-middle table-bordered">
+    <thead>
+        <tr class="table-secondary">
+            <th colspan="8" align="left"><h3><u>{{ customer[1] }} Orders</u></h3></th>
+        </tr>
+        <tr class="table-secondary">
+            <th></th>
+            <th scope="col">Item</th>
+            <th scope="col">Price per Unit</th>
+            <th scope="col">Order Amount</th>
+            <th scope="col">Unit</th>
+            <th scope="col">Item Total</th>
+            <th scope="col">Placed On</th>
+            <th scope="col">Complete Order</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in user.open_orders %} 
+        {% if customer[1] == order.customer %}
+        <tr>
+            <td>
+                <button type="button" class="btn btn-outline-danger btn-sm" onClick="declineOrder({{ order.id }})"">Decline Order</button>
+            </td>
+            <td>{{ order.item }}</td>
+            <td align="center">${{ order.price }}</td>
+            <td align="center" class="table-bordered"><b>{{ order.amount }}</b></td>
+            <td>{{ order.unit }}</td>
+            <td>${{ order.r_total }}</td>
+            <td>{{ order.order_placed.strftime('%m/%d/%Y') }}</td>
+            <td>
+                <button type="button" class="btn btn-outline-success btn-sm" onClick="completeOrder({{ order.id }})"">Complete Order</button>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        <tr class="table-secondary">
+            <td colspan="8" align="center">Total Amount Owed: ${{ customer[0] }}</td>
+        </tr>
+    </tbody>
+</table>
+<br />
+<hr size="500" noshade>
+<br />
+{% endfor %}
+
+{% elif current_user.B_type == 'restaurant' %} 
+<table class="table align-middle table-bordered">
+    <thead>
+        <tr class="table-secondary">
+            <th></th>
+            <th scope="col">Vendor</th>
+            <th scope="col">Item</th>
+            <th scope="col">Price per Unit</th>
+            <th scope="col">Order Amount</th>
+            <th scope="col">Unit</th>
+            <th scope="col">Item Total</th>
+            <th scope="col">Placed On</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in customer_open_orders %} 
+        <tr>
+            <td>
+                <button type="button" class="btn btn-outline-danger btn-sm" onClick="declineOrder({{ order.id }})"">Cancel Order</button>
+            </td>
+            <td>{{ order.vendor }}</td>
+            <td>{{ order.item }}</td>
+            <td align="center">${{ order.price }}</td>
+            <td align="center" class="table-bordered"><b>{{ order.amount }}</b></td>
+            <td>{{ order.unit }}</td>
+            <td>${{ order.r_total }}</td>
+            <td>{{ order.order_placed.strftime('%m/%d/%Y') }}</td>
+            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br />
+<hr size="500" noshade>
+<br />
+{% endif %}
+
+<h2 align="center" class="p-3 mb-2 bg-success text-white bg-gradient bg-opacity-90 bg-text-white"><u>Completed Orders</u></h2>
+
+{% if current_user.B_type == 'farm' %}
+<table class="table align-middle table-bordered">
+    <thead class="table-secondary">
+        <th>Customer</th>
+        <th>Item</th>
+        <th>Price per Unit</th>
+        <th>Order Amount</th>
+        <th>Unit</th>
+        <th>Item Total</th>
+        <th>Placed On</th>
+        <th>Completed On</th>
+    </thead>
+    <tbody>
+        {% for order in vendor_closed_orders %}
+        <tr>
+            <td>{{ order.customer }}</td>
+            <td>{{ order.item }}</td>
+            <td>${{ order.price }}</td>
+            <td>{{ order.amount }}</td>
+            <td>{{ order.unit }}</td>
+            <td>${{ order.r_total }}</td>
+            <td>{{ order.order_placed.strftime('%m/%d/%Y') }}</td>
+            <td>{{ order.order_completed.strftime('%m/%d/%Y') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% elif current_user.B_type == 'restaurant' %}
+<table class="table align-middle table-bordered">
+    <thead class="table-secondary">
+        <th>Vendor</th>
+        <th>Item</th>
+        <th>Price per Unit</th>
+        <th>Order Amount</th>
+        <th>Unit</th>
+        <th>Item Total</th>
+        <th>Placed On</th>
+        <th>Completed On</th>
+    </thead>
+    <tbody>
+        {% for order in customer_closed_orders %}
+        <tr>
+            <td>{{ order.vendor }}</td>
+            <td>{{ order.item }}</td>
+            <td>${{ order.price }}</td>
+            <td>{{ order.amount }}</td>
+            <td>{{ order.unit }}</td>
+            <td>${{ order.r_total }}</td>
+            <td>{{ order.order_placed.strftime('%m/%d/%Y') }}</td>
+            <td>{{ order.order_completed.strftime('%m/%d/%Y') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+
+
+{% endblock %}
+
+

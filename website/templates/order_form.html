@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Order Form{% endblock %}
+
+{% block content %}
+<h1 align="center">Order Form</h1>
+<br />
+<form method="POST">
+<table class="table align-middle" id="orderForm">
+    <thead>
+        <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Price per Unit</th>
+            <th scope="col">Unit</th>
+            <th scope="col">Notes</th>
+            <th scope="col">Order Amount</th>
+            <th scope="col">Item Total</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        {% for item in user.items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td name="price" value="{{ item.price }}" class="price">{{ item.price }}</td>
+            <td>{{ item.unit }}</td>
+            <td>{{ item.notes }}</td>
+            <td><input type="number" name="order" class="order" onkeyup="sum()"></td>
+            <td class="r_total" type="number"></td>
+        </tr>
+        {% endfor %}
+        <tr class="table-active table-group-divider">
+            <th align="right">Total:</th>
+            <th align="center" id="order_total"></th>
+        </tr>
+    </tbody>
+</table>
+<button type="submit" class="btn btn-primary">Submit Order</button>
+</form>
+<br />
+{% if user.B_name == current_user.B_name %}
+    <a href="{{ url_for('views.edit_order_form', B_name=current_user.B_name) }}">Edit Order Form</a>
+{% endif %}
+
+
+{% endblock %}
+
+

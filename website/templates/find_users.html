@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Find Users{% endblock %}
+
+{% block content %} 
+    <h1 align="center" class="bg-info bg-gradient p-3 text-white" >Find Users</h1>
+
+    <div align="center">
+    <form method="POST">
+        <input type="text" class="form-control" id="search" name="search" placeholder="Search for a user">            
+        <br />
+        <button type="submit" class="btn btn-info">Search</button>
+    </form>
+    </div>
+    <br /><br />
+
+    {% if results %} 
+    <table class="table table-light">
+        <tr align="left" class="table-secondary">
+            <td><u>Results</u></td> 
+        </tr>
+        {% for result in results %} 
+        <tr>
+            <td align="left"><a href="{{ url_for('views.profile', B_name=result.B_name)}}"><h5><u>{{ result.B_name }}</u></h5></a></td>
+        </tr>          
+        {% endfor %} 
+    </table>  
+    {% endif %}
+
+    <br />
+    <hr>
+    <br />
+    <h1 align="center" class="p-3 mb-2 bg-success text-white bg-gradient bg-opacity-90 bg-text-white">Saved Users</h1>
+    <table align="center" class="table table-bordered table-light">
+        <tr class="table-secondary">
+            <th>
+                User
+            </th>
+        </tr>
+        {% for fav in favorites %}
+        <tr>
+            
+            <td><a href="{{ url_for('views.profile', B_name=fav.vendor) }}"><h5><u>{{ fav.vendor }}</u></h5></a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %} 
+

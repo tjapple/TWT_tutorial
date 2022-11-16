@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<table class ="table" align="center">
+    <tr valign="top">
+        <td><img src="{{ user.avatar(128) }}"></td>
+        
+        <td align="center">
+            <h1 id="test">{{ user.B_name }}</h1>
+            {% if user.last_seen %}<p>Last activity: {{ user.last_seen.strftime('%m/%d/%Y') }}</p>{% endif %}
+            <p>{{ user.B_type.capitalize() }}</p>
+            {% if user.about_us %}<h2>About Us</h2><p>{{ user.about_us }}</p>{% endif %}
+        </td>
+        <td colspan="1" align="right">
+            {% if user.B_name == current_user.B_name %} 
+            <p><button class="btn btn-info bg-gradient" onclick='window.location.href="{{ url_for('views.edit_profile') }}";'>Edit Profile</button></p>
+            <p><button class="btn btn-info bg-gradient" onclick='window.location.href="{{ url_for('views.view_orders') }}";'>View Orders</button></p>
+                {% if current_user.B_type == 'farm' %}
+                <p><button class="btn btn-info bg-gradient" onclick='window.location.href="{{ url_for('views.edit_order_form') }}";'>Edit Order Form</button></p>
+                {% endif %}
+            {% elif user.B_type == 'farm' and current_user.B_type == 'restaurant' %} 
+            <p><button class="btn btn-info bg-gradient" onclick='window.location.href="{{ url_for('views.order_form', B_name=user.B_name) }}";'>Go to Order Form</button></p>
+                {% if fav_status == True %}
+                <p><button class="btn btn-info bg-gradient" onclick="unFavFarm({{ fav_id }})">Un-Fav this Farm</button></p>            
+                {% else %} 
+                <p><button class="btn btn-info bg-gradient" onclick="favFarm({{ user.id }})">Fav this Farm :)</button></p>
+                {% endif %}   
+            {% elif user.B_type == 'restaurant' %}
+            <p></p>             
+            {% endif %} 
+        </td>
+    </tr>
+</table>
+
+{% if user.id == current_user.id %}
+<hr>
+<form method="POST">
+    <textarea name="post" id="post" class="form-control"></textarea>
+        <br />
+        <div align="center">
+            <button type="submit" class="btn btn-info bg-gradient">Add post</button>
+        </div>
+</form>
+{% endif %}
+<br />
+
+<hr noshade>
+{% for post in posts %} 
+<table class="table table-bordered">
+    <tr>
+        <td><img src="{{ user.avatar(36) }}"></td>
+        <td align="left"><h5><u>{{ post.author.B_name }}</u></h5></td>
+        {% if user.id == current_user.id %} 
+        <button type="button" class="close" onClick="deletePost({{ post.id }})">
+            <span aria-hidden="true" class="btn btn-danger">&times;</span>    
+        </button>
+        <span>{{ post.timestamp.strftime("%m/%d/%Y") }} </span>
+        {% endif %}
+    </tr>
+    <tr>
+        <td></td>
+        <td>{{ post.data }}</td>
+    </tr>
+</table>
+<br />
+<br />
+{% endfor %}
+
+    
+
+{% endblock %}
+
+

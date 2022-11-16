@@ -2,23 +2,34 @@
 {% block title %}Homepage{% endblock %}
 
 {% block content %} 
-    <h1 align="center">Notes</h1>
-    <ul class="list-group list-group-flush" id="notes">
-        {% for note in user.notes %} 
-            <li class="list-group-item">{{ note.data }}
-                <button type="button" class="close" onClick="deleteNote({{ note.id }})">
-                    <span aria-hidden="true">&times;</span>    
-                </button>
-            </li>
-        {% endfor %}
-    </ul>
-    <form method="POST">
-        <textarea name="note" id="note" class="form-control"></textarea>
-            <br />
-            <div align="center">
-                <button type="submit" class="btn btn-primary">Add note</button>
-            </div>
-    </form>
+<h1 align="center" class="p-3 mb-2 bg-primary bg-gradient text-white">Recent Happenins</h1>
+<hr noshade>
+<br />
+
+{% for post in posts %} 
+<!-- some kind of JOIN statement that combines posts and completed_orders at the user.id foreign key -->
+<table class="table table-bordered table-light">
+    <tr class="table-secondary">
+        <td><img src="{{ post.author.avatar(36) }}"></td>
+        <td align="left"><a href="{{ url_for('views.profile', B_name=post.author.B_name) }}"><h5><u>{{ post.author.B_name }}</u></h5></a></td>
+        {% if post.author.id == current_user.id %} 
+        <button type="button" class="close" onClick="deletePost({{ post.id }})">
+            <span aria-hidden="true" class="btn btn-danger">&times;</span>    
+        </button>
+        {% endif %}
+        <span>{{ post.timestamp.strftime("%m/%d/%Y") }} </span>
+        
+    </tr>
+    <tr>
+        <td></td>
+        <td>{{ post.data }}</td>
+    </tr>
+</table>
+<br />
+<br />
+{% endfor %}
+
+  
 
 
 {% endblock %} 

@@ -10,16 +10,31 @@
             <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">            
         </div>
         <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name">            
+            <label for="B_name">Business Name</label>
+            <input type="text" class="form-control" id="B_name" name="B_name" placeholder="Enter business name">            
         </div>
         <div class="form-group">
             <label for="password1">Password</label>
-            <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter password">            
+            <input type="password" class="form-control" id="password1" name="password1" placeholder="At least 7 characters">            
         </div>
         <div class="form-group">
             <label for="password2">Confirm Password</label>
             <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password">            
+        </div>
+        <div class="form-group">
+            <label for="B_type">Select Business Type:     </label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="B_type" id="B_type_u" value="user" checked>  
+                <label class="form-check-label" for="B_type_u">User</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="B_type" id="B_type_r" value="restaurant">
+                <label class="form-check-label" for="B_type_r">Restaurant</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="B_type" id="B_type_f" value="farm">  
+                <label class="form-check-label" for="B_type_f">Farm</label>
+            </div>
         </div>
         <br />
         <button type="submit" class="btn btn-primary">Submit</button>

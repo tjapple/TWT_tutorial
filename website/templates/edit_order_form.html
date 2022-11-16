@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Order Form{% endblock %}
+
+{% block content %}
+<h1 align="center">Edit Order Form</h1>
+<br />
+<h3 align="left"><u>Add Item</u></h3>
+<form method="POST">
+    <div class="form-group">
+        <label for="name">Item</label>
+        <input type="text" class="form-control" autofocus="on" id="name" name="name" placeholder="Enter item">            
+    </div>
+    <div class="form-group">
+        <label for="price">Price per Unit</label>
+        <input type="number" step='0.01' class="form-control" id="price" name="price" placeholder="Enter price per unit">            
+    </div>
+    <div class="form-group">
+        <label for="unit">Unit</label>
+        <input type="text" class="form-control" id="unit" name="unit" placeholder="Enter unit">            
+    </div>
+    <div class="form-group">
+        <label for="notes">Notes</label>
+        <input type="text" class="form-control" id="notes" name="notes" placeholder="Enter notes">            
+    </div>
+    <button type="submit" class="btn btn-success bg-gradient">Add Item</button>
+</form>
+<br />  
+
+<table class="table">
+    <thead>
+        <tr class="table-secondary">
+            <th scope="col">Remove Item</th>
+            <th scope="col">Item</th>
+            <th scope="col">Price per Unit</th>
+            <th scope="col">Unit</th>
+            <th scope="col">Notes</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        {% for item in user.items %}
+        <tr>
+            <td>
+                <button type="reset" class="close" onClick="deleteItem({{ item.id }})">
+                    <span aria-hidden="true">&times;</span>    
+                </button>
+            </td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.unit }}</td>
+            <td>{{ item.notes }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br />
+
+
+
+
+    {% if user.B_name == current_user.B_name %}
+        <a href="{{ url_for('views.home') }}">Back to Home</a>
+    {% endif %}
+    
+
+{% endblock %}
+
+

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+    <form method = "POST">
+        <h3 align="center">Edit Profile</h3>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">            
+        </div>
+        <div class="form-group">
+            <label for="B_name">Business Name</label>
+            <input type="text" class="form-control" id="B_name" name="B_name" value="{{ user.B_name }}">            
+        </div>
+        <div class="form-group">
+            <label for="about_us">About Us</label>
+            <textarea type="text" class="form-control" id="about_us" name="about_us">{{ user.about_us }}</textarea>           
+
+        <br />
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+{% endblock %}
