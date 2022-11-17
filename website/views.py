@@ -182,13 +182,19 @@ def complete_order():
     open_order = json.loads(request.data)
     openOrderId = open_order['openOrderId']
     open_order = OpenOrder.query.get(openOrderId)
-    
+    customer_id = db.engine.execute("SELECT id FROM user WHERE B_name = ?", open_order.customer)
+    customer_id=list(customer_id)
+    data = f"We just bought some {open_order.item} from {open_order.vendor}!"
+
     # Check if open_order exists and copy its data into a ClosedOrder object, ready to be put in db
     if open_order:
         closed_order = ClosedOrder(open_order_id=open_order.id, item=open_order.item, price=open_order.price, unit=open_order.unit, amount=open_order.amount, r_total=open_order.r_total, order_placed=open_order.order_placed, customer=open_order.customer, vendor=open_order.vendor, vendor_id=open_order.vendor_id)
+        new_post = Post(user_id=customer_id[0][0], data=data)
+
         if open_order.vendor_id == current_user.id:
             db.session.delete(open_order)
             db.session.add(closed_order)
+            db.session.add(new_post)
             db.session.commit()
 
     return jsonify({})
